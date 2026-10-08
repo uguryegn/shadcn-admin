@@ -85,3 +85,21 @@
     height: 0;
   }
 }
+
+/* ENPower rotasyon haritası: vurgulanan MT akışı */
+.enp-flow-animated {
+  stroke-dasharray: 10 6;
+  animation: enp-flow-dash 1.1s linear infinite;
+}
+
+@keyframes enp-flow-dash {
+  to {
+    stroke-dashoffset: -32;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enp-flow-animated {
+    animation: none;
+  }
+}

@@ -1,3 +1,5 @@
+> **ENPower Compass** — Bu fork, 18 aylık (kurgusal) ENPower Management Trainee programı için rol bazlı bir gelişim yolculuğu prototipine dönüştürüldü. Ürün ve mimari kararları için: [docs/enpower-mt.md](docs/enpower-mt.md). Tüm veriler kurgusaldır.
+
 # Shadcn Admin Dashboard
 
 Admin Dashboard UI crafted with Shadcn and Vite. Built with responsiveness and accessibility in mind.
