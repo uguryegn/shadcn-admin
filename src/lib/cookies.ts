@@ -11,7 +11,15 @@ const DEFAULT_MAX_AGE = 60 * 60 * 24 * 7 // 7 days
 export function getCookie(name: string): string | undefined {
   if (typeof document === 'undefined') return undefined
 
-  const value = `; ${document.cookie}`
+  let cookies: string
+  try {
+    cookies = document.cookie
+  } catch {
+    // Sandboxed frames (e.g. hosted previews) may block cookie access.
+    return undefined
+  }
+
+  const value = `; ${cookies}`
   const parts = value.split(`; ${name}=`)
   if (parts.length === 2) {
     const cookieValue = parts.pop()?.split(';').shift()
@@ -30,7 +38,11 @@ export function setCookie(
 ): void {
   if (typeof document === 'undefined') return
 
-  document.cookie = `${name}=${value}; path=/; max-age=${maxAge}`
+  try {
+    document.cookie = `${name}=${value}; path=/; max-age=${maxAge}`
+  } catch {
+    // Ignore: cookies unavailable in sandboxed frames.
+  }
 }
 
 /**
@@ -39,5 +51,9 @@ export function setCookie(
 export function removeCookie(name: string): void {
   if (typeof document === 'undefined') return
 
-  document.cookie = `${name}=; path=/; max-age=0`
+  try {
+    document.cookie = `${name}=; path=/; max-age=0`
+  } catch {
+    // Ignore: cookies unavailable in sandboxed frames.
+  }
 }

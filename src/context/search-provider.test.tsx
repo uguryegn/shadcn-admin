@@ -2,8 +2,9 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { render, type RenderResult } from 'vitest-browser-react'
 import { userEvent } from 'vitest/browser'
 import { SearchProvider } from '@/context/search-provider'
+import { useProgramStore } from '@/features/enpower/store/program-store'
 
-const COMMAND_MENU_PLACEHOLDER = 'Type a command or search...'
+const COMMAND_MENU_PLACEHOLDER = 'Sayfa veya komut ara...'
 
 const mocks = vi.hoisted(() => ({
   navigate: vi.fn(),
@@ -58,6 +59,7 @@ async function openCommandPalette(
 describe('SearchProvider and CommandMenu', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    useProgramStore.getState().setRole('mt')
   })
 
   it('renders the command palette when the palette is open', async () => {
@@ -69,11 +71,11 @@ describe('SearchProvider and CommandMenu', () => {
     await expect
       .element(getByPlaceholder(COMMAND_MENU_PLACEHOLDER))
       .toBeInTheDocument()
-    await expect.element(getByText('Theme')).toBeInTheDocument()
-    await expect.element(getByText('Light')).toBeInTheDocument()
-    await expect.element(getByText('Dark')).toBeInTheDocument()
-    await expect.element(getByText('System')).toBeInTheDocument()
-    await expect.element(getByText('Dashboard')).toBeInTheDocument()
+    await expect.element(getByText('Tema')).toBeInTheDocument()
+    await expect.element(getByText('Açık')).toBeInTheDocument()
+    await expect.element(getByText('Koyu')).toBeInTheDocument()
+    await expect.element(getByText('Sistem')).toBeInTheDocument()
+    await expect.element(getByText('Bugün')).toBeInTheDocument()
   })
 
   it('does not show the dialog content when search is closed', async () => {
@@ -109,23 +111,24 @@ describe('SearchProvider and CommandMenu', () => {
 
     await openCommandPalette(screen)
 
-    await userEvent.click(screen.getByText('Tasks'))
+    await userEvent.click(screen.getByText('18 Ay Yolculuk'))
 
-    expect(mocks.navigate).toHaveBeenCalledWith({ to: '/tasks' })
+    expect(mocks.navigate).toHaveBeenCalledWith({ to: '/journey' })
     await expect
       .element(screen.getByPlaceholder(COMMAND_MENU_PLACEHOLDER))
       .not.toBeInTheDocument()
   })
 
-  it('navigates for nested sidebar items (group with sub-items)', async () => {
+  it('shows role-specific navigation for the HR view', async () => {
+    useProgramStore.getState().setRole('hr')
     const screen = await renderWithSearchProvider()
     const { getByPlaceholder, getByRole } = screen
 
     await openCommandPalette(screen)
 
-    await userEvent.click(getByRole('option', { name: 'Settings Account' }))
+    await userEvent.click(getByRole('option', { name: 'Kohort Analitiği' }))
 
-    expect(mocks.navigate).toHaveBeenCalledWith({ to: '/settings/account' })
+    expect(mocks.navigate).toHaveBeenCalledWith({ to: '/cohort' })
     await expect
       .element(getByPlaceholder(COMMAND_MENU_PLACEHOLDER))
       .not.toBeInTheDocument()
@@ -136,7 +139,7 @@ describe('SearchProvider and CommandMenu', () => {
 
     await openCommandPalette(screen)
 
-    await userEvent.click(screen.getByText('Dark'))
+    await userEvent.click(screen.getByText('Koyu'))
 
     expect(mocks.setTheme).toHaveBeenCalledWith('dark')
     await expect
@@ -155,7 +158,7 @@ describe('SearchProvider and CommandMenu', () => {
     )
 
     await expect
-      .element(screen.getByText('No results found.'))
+      .element(screen.getByText('Sonuç bulunamadı.'))
       .toBeInTheDocument()
   })
 })
