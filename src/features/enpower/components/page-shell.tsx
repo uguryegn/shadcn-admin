@@ -82,7 +82,7 @@ function MobileTabBar() {
   return (
     <nav
       aria-label='Mobil gezinme'
-      className='fixed inset-x-3 bottom-3 z-40 rounded-2xl border bg-background/85 p-1.5 shadow-lg backdrop-blur-xl md:hidden'
+      className='fixed inset-x-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom,0px))] z-40 rounded-2xl border bg-background/85 p-1.5 shadow-lg backdrop-blur-xl md:hidden'
     >
       <ul className='grid auto-cols-fr grid-flow-col'>
         {items.map((item) => {
